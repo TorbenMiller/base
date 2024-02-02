@@ -1,0 +1,29 @@
+version: "3"
+name: base
+services:
+    server:
+        restart: unless-stopped
+        container_name: base-server
+        build:
+            context: ..
+            dockerfile: ./development/server.Dockerfile
+        image: base-server:latest
+        ports:
+            - "8086:3333"
+            - "9230:9229"
+        volumes:
+            - ../server/src:/app/src:delegated
+            - ../server/storage:/app/storage:delegated
+        env_file:
+            - config/.env
+
+    db:
+        restart: unless-stopped
+        container_name: base-db
+        image: postgis/postgis:16-3.4
+        ports:
+            - "6789:5432"
+        env_file:
+            - config/.env
+        volumes:
+            - ./data:/var/lib/postgresql/data

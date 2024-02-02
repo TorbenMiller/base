@@ -1,0 +1,28 @@
+{
+    "defaultEnv": "dev",
+    "dev": {
+        "driver": "pg",
+        "host": "localhost",
+        "user": "base",
+        "password": "base",
+        "database": "base",
+        "schema": "public",
+        "port": 6789
+    },
+    "production": {
+        "driver": "pg",
+        "host": "db",
+        "user": {
+            "ENV": "POSTGRES_USER"
+        },
+        "password": {
+            "ENV": "POSTGRES_PASSWORD"
+        },
+        "database": {
+            "ENV": "POSTGRES_DB"
+        },
+        "schema": "public",
+        "port": 5432
+    },
+    "sql-file": true
+}

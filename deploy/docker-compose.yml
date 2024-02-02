@@ -1,0 +1,40 @@
+version: "3"
+services:
+    server:
+        restart: unless-stopped
+        container_name: base-server
+        networks:
+            - base-network
+        build:
+            context: ..
+            dockerfile: ./deploy/server.Dockerfile
+        image: base-server:latest
+        env_file:
+            - config/.env
+        ports:
+            - "8086:3333"
+        volumes:
+            - ../storage:/app/storage
+    db:
+        restart: unless-stopped
+        container_name: base-db
+        networks:
+            - base-network
+        image: postgis/postgis:16-3.4
+        env_file:
+            - config/.env
+        volumes:
+            - ../postgres-data:/var/lib/postgresql/data
+
+    migration:
+        container_name: xarvio-connector-migration
+        networks:
+            - base-network
+        image: base-migration:latest
+        env_file:
+            - config/.env
+        command: ["yarn", "db-migrate", "up", "--env", "production"]
+
+networks:
+    base-network:
+        driver: bridge
